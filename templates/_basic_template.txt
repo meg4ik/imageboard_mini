@@ -1,0 +1,9 @@
+My standart template for all report from database app
+
+{% block main %}
+{% endblock %}
+
+{% block footer %}
+    This report was create by Jinja2
+    author: meg4ik
+{% endblock %}

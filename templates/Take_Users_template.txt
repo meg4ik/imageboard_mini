@@ -1,0 +1,13 @@
+{% extends "_basic_template.txt" %}
+
+{% block main %}
+Data from User table:
+    {% for row in quotes %}
+        {{row.to_json()}}
+    {% endfor %}
+{% endblock %}
+
+{% block footer %}
+    Take_Users_template was used
+    {{ super() }}
+{% endblock %}
