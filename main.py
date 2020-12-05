@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 from simple_settings import settings
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.datastructures import MultiDict
 
 app = Flask(__name__, template_folder="templates")
 try:
@@ -10,48 +11,50 @@ except:
 
 db = SQLAlchemy(app)
 
-@app.route("/User", methods=["POST","GET"])
-def User_fu():
-    from models import User
-    from forms import UserForm
+@app.route("/Topic", methods=["POST","GET"])
+def Topic_fu():
+    from models import Topic
+    from forms import TopicForm
     if request.method == "POST":
-        form = UserForm(request.form)
+        form = TopicForm(request.form)
         if form.validate():
-            usersql = User(**form.data)
-            db.session.add(usersql)
+            topicsql = Topic(**form.data)
+            db.session.add(topicsql)
             db.session.commit()
-            return "adding!!!", 200
+            return render_template('_adding_topic_successful.txt', topicsql=topicsql)
         else:
             return "Form is not valid!", 400 
-    else:
-        try:
-            quotes = User.query.all()
-        except Exception as e:
+    try:
+        quotes = Topic.query.all()
+    except Exception as e:
             return str(e)
-        else:
-            return render_template('Take_Users_template.txt', quotes=quotes)
-            #return {"query":[p.to_json() for p in quotes]}
+    else:
+        return render_template('_take_topic_template.txt', quotes=quotes)
 
-@app.route("/Post", methods=["POST","GET"])
-def Post_fu():
-    from models import Post
-    from forms import PostForm
+@app.route("/Topic/<int:Topic_id_to>", methods=["POST","GET"])
+def Comment_fu(Topic_id_to):
+    from models import Comment
+    from forms import CommentForm
     if request.method == "POST":
-        form = PostForm(request.form)
+        new_request = request.form.to_dict()
+        new_request["Topic_id"] = Topic_id_to
+        a = MultiDict()
+        for x in new_request:
+            a.add(x, new_request[x])
+        form = CommentForm(a)
         if form.validate():
-            postsql = Post(**form.data)
-            db.session.add(postsql)
+            commentsql = Comment(**form.data)
+            db.session.add(commentsql)
             db.session.commit()
-            return "adding!!!", 200
+            return "lol"
         else:
-            return "Form is not valid!", 400 
-    else:
-        try:
-            quotes = Post.query.all()
-        except Exception as e:
-            return str(e)
-        else:
-            return {"query":[p.to_json() for p in quotes]}
+            return "Comment is not valid!", 400 
+    # try:
+    #     quotes = Post.query.all()
+    # except Exception as e:
+    #     return str(e)
+    # else:
+    #     return {"query":[p.to_json() for p in quotes]}
         
 if __name__ == "__main__":
     from models import *

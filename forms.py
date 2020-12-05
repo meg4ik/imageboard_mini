@@ -1,13 +1,13 @@
 from wtforms_alchemy import ModelForm
-from models import User, Post
+from models import Topic, Comment
 
-class UserForm(ModelForm):
+class TopicForm(ModelForm):
     class Meta:
-        model = User 
+        model = Topic 
 
-class PostForm(ModelForm):
-    class Meta:
-        model = Post
+class CommentForm(ModelForm):
+    class Meta():
+        model = Comment
         include = [
-            'user_id',
+            'Topic_id',
         ]
