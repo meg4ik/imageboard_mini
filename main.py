@@ -46,15 +46,14 @@ def Comment_fu(Topic_id_to):
             commentsql = Comment(**form.data)
             db.session.add(commentsql)
             db.session.commit()
-            return "lol"
+            return render_template('_adding_comment_successful.txt', commentsql=commentsql)
         else:
             return "Comment is not valid!", 400 
-    # try:
-    #     quotes = Post.query.all()
-    # except Exception as e:
-    #     return str(e)
-    # else:
-    #     return {"query":[p.to_json() for p in quotes]}
+
+    topic_select = Topic.query.filter_by(id = int(Topic_id_to)).first()
+
+    comments_select = Comment.query.filter_by(Topic_id = int(Topic_id_to))
+    return render_template('_take_comment_template.txt', topic=topic_select, comments = comments_select)
         
 if __name__ == "__main__":
     from models import *
