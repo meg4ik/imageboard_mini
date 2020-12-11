@@ -1,0 +1,26 @@
+{% extends "_basic_template.html" %}
+
+{% block main %}
+<div class="container">
+    <h2>{{topic.title}}<br>
+        Topic was created at {{topic.date}}</h2>
+    <p>{{topic.content}}</p>
+
+    <h2 class="text-center">Comments:</h2>
+    {% for row in comments %}
+    <div class="border border-warning">
+        <p>{{row.date}}</p>
+        <b>{{row.text}}</b><br>
+    </div>
+    {% endfor %}
+    
+    <form method="POST">
+        <div class="form-group">
+          <label>Text:</label>
+          <input type="text" class="form-control"  name="text">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+    
+{% endblock %}

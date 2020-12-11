@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, url_for
 from simple_settings import settings
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.datastructures import MultiDict
@@ -21,15 +21,14 @@ def Topic_fu():
             topicsql = Topic(**form.data)
             db.session.add(topicsql)
             db.session.commit()
-            return render_template('_adding_topic_successful.txt', topicsql=topicsql)
         else:
-            return "Form is not valid!", 400 
+            return render_template("errors.html", errors_text = str(form.errors)), 400
     try:
         quotes = Topic.query.all()
     except Exception as e:
-            return str(e)
+            return render_template("errors.html", errors_text = str(e)), 500
     else:
-        return render_template('_take_topic_template.txt', quotes=quotes)
+        return render_template('_take_topic_template.html', quotes=quotes, link_to = url_for('Topic_fu')+"/")
 
 @app.route("/Topic/<int:Topic_id_to>", methods=["POST","GET"])
 def Comment_fu(Topic_id_to):
@@ -46,14 +45,14 @@ def Comment_fu(Topic_id_to):
             commentsql = Comment(**form.data)
             db.session.add(commentsql)
             db.session.commit()
-            return render_template('_adding_comment_successful.txt', commentsql=commentsql)
         else:
-            return "Comment is not valid!", 400 
+            return render_template("errors.html", errors_text = str(form.errors)), 400
 
     topic_select = Topic.query.filter_by(id = int(Topic_id_to)).first()
 
     comments_select = Comment.query.filter_by(Topic_id = int(Topic_id_to))
-    return render_template('_take_comment_template.txt', topic=topic_select, comments = comments_select)
+    print()
+    return render_template('_take_comment_template.html', topic=topic_select, comments = comments_select)
         
 if __name__ == "__main__":
     from models import *

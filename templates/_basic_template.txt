@@ -1,7 +1,0 @@
-{% block main %}
-{% endblock %}
-
-{% block footer %}
-    IMAGEBOARD_MINI
-    author: meg4ik
-{% endblock %}

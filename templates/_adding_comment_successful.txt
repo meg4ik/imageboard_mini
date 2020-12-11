@@ -1,1 +1,0 @@
-Your comment to '{{commentsql.topic.title}}' topic was successfully added at {{commentsql.date}}

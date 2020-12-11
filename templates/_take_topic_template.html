@@ -1,0 +1,28 @@
+{% extends "_basic_template.html" %}
+
+{% block main %}
+
+<div class="container">
+    <h2>Add new topic</h2>
+    <form method="POST">
+        <div class="form-group">
+          <label>Title:</label>
+          <input type="text" class="form-control"  name="title">
+        </div>
+        <div class="form-group">
+          <label for="comment">Content:</label>
+          <textarea class="form-control" rows="4" name="content"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+    <h2 class="text-center">All topics:</h2>
+    {% for row in quotes %}
+    <div class="border border-warning">
+        <p><a href = {{link_to}}{{row.id}}>{{row.title}}</a></p>
+        <b>ID:</b> {{row.id}}<br>
+    </div>
+    {% endfor %}
+</div>
+    
+{% endblock %}
